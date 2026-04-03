@@ -1,3 +1,5 @@
+'use client';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import MethodologyBuilder from '@/components/methodology/MethodologyBuilder';
 import MethodologyCanvas from '@/components/methodology/MethodologyCanvas';
@@ -5,10 +7,13 @@ import ComplianceMonitor from '@/components/compliance/ComplianceMonitor';
 import RealtimeTraffic from '@/components/dashboard/RealtimeTraffic';
 import { AnalyticsService } from '@/domain/services/AnalyticsService';
 import SimulationDashboard from '@/components/testing/SimulationDashboard';
-import { ChartBarIcon, UsersIcon, CurrencyDollarIcon, LightBulbIcon } from '@heroicons/react/24/outline';
+import { ChartBarIcon, UsersIcon, CurrencyDollarIcon, LightBulbIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 
 export default function Home() {
+  const [activeMethodology, setActiveMethodology] = useState<any>(null);
+  const [isEditing, setIsEditing] = useState(false);
+
   // Mock data for initial world-class dashboard rendering
   const metrics = {
     cltv: 12400,
@@ -18,6 +23,21 @@ export default function Home() {
   };
   
   const suggestions = AnalyticsService.generateSuggestions(metrics);
+
+  const handleEdit = (m: any) => {
+    setActiveMethodology(m);
+    setIsEditing(true);
+    // Smooth scroll to canvas
+    setTimeout(() => {
+      document.getElementById('logic-canvas')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
+  const handleSave = (stages: any) => {
+    alert(`Success! Methodology '${activeMethodology?.name || 'New'}' logic has been re-synced to the Dubai node.`);
+    setIsEditing(false);
+    setActiveMethodology(null);
+  };
 
   return (
     <main className="dark min-h-screen bg-slate-950 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black p-8 text-white space-y-12 antialiased">
@@ -54,14 +74,14 @@ export default function Home() {
       </header>
 
 
-      {/* WORLD-CLASS SAAS ANALYTICS KPI GRID */}
+      {/* KPI GRID */}
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="group relative rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-3xl transition hover:bg-white/10 hover:-translate-y-1 duration-300">
           <ChartBarIcon className="h-8 w-8 text-blue-500 opacity-20 absolute top-8 right-8" />
           <div className="flex items-center gap-2 mb-4">
              <h4 className="text-[10px] font-black tracking-widest text-slate-500 uppercase">Customer Sentiment</h4>
              <span className="cursor-help w-4 h-4 rounded-full bg-white/5 flex items-center justify-center text-[8px] border border-white/10" 
-                   title="Net Promoter Score (NPS): Calculated by subtracting the % of Detractors from the % of Promoters. A score above 70 is world-class.">?</span>
+                   title="NPS calculation info">?</span>
           </div>
           <div className="flex items-baseline gap-3">
              <span className="text-4xl font-black tabular-nums">{metrics.nps}</span>
@@ -74,8 +94,7 @@ export default function Home() {
           <CurrencyDollarIcon className="h-8 w-8 text-emerald-500 opacity-20 absolute top-8 right-8" />
           <div className="flex items-center gap-2 mb-4">
              <h4 className="text-[10px] font-black tracking-widest text-slate-500 uppercase">LTV (Lifetime Value)</h4>
-             <span className="cursor-help w-4 h-4 rounded-full bg-white/5 flex items-center justify-center text-[8px] border border-white/10" 
-                   title="CLTV: Predicted net profit attributed to the entire future relationship with a customer. Helps define target CAC (Customer Acquisition Cost).">?</span>
+             <span className="cursor-help w-4 h-4 rounded-full bg-white/5 flex items-center justify-center text-[8px] border border-white/10" title="CLTV info">?</span>
           </div>
           <div className="flex items-baseline gap-3">
              <span className="text-4xl font-black tabular-nums">${(metrics.cltv / 1000).toFixed(1)}k</span>
@@ -88,8 +107,7 @@ export default function Home() {
           <UsersIcon className="h-8 w-8 text-purple-500 opacity-20 absolute top-8 right-8" />
           <div className="flex items-center gap-2 mb-4">
              <h4 className="text-[10px] font-black tracking-widest text-slate-500 uppercase">Revenue / User</h4>
-             <span className="cursor-help w-4 h-4 rounded-full bg-white/5 flex items-center justify-center text-[8px] border border-white/10" 
-                   title="ARPU: Average Revenue Per User. Crucial for understanding which subscription tier is gaining the most traction in your market.">?</span>
+             <span className="cursor-help w-4 h-4 rounded-full bg-white/5 flex items-center justify-center text-[8px] border border-white/10" title="ARPU info">?</span>
           </div>
           <div className="flex items-baseline gap-3">
              <span className="text-4xl font-black tabular-nums">${metrics.arpu}</span>
@@ -120,16 +138,18 @@ export default function Home() {
       </div>
 
       <section>
-        <MethodologyBuilder />
+        <MethodologyBuilder onEdit={handleEdit} onAdd={() => handleEdit({ id: Date.now(), name: 'New Analytic Framework' })} />
       </section>
 
-      <section>
-        <MethodologyCanvas />
-      </section>
-
-      <section>
-        <ComplianceMonitor />
-      </section>
+      {isEditing && (
+        <section id="logic-canvas" className="animate-in fade-in slide-in-from-bottom-10 duration-700">
+          <MethodologyCanvas 
+            methodology={activeMethodology} 
+            onSave={handleSave} 
+            onCancel={() => { setIsEditing(false); setActiveMethodology(null); }} 
+          />
+        </section>
+      )}
 
       <section className="pb-24">
         <SimulationDashboard />

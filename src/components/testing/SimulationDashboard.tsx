@@ -31,35 +31,54 @@ export default function SimulationDashboard() {
 
   const runSimulation = async () => {
     setIsRunning(true);
+    setResults([]);
     const processor = new ProcessMethodology();
     const outcomes = [];
 
-    for (const sub of mockSubmissions) {
-      // Simulate processing time for each survey outcome
-      const outcome = await processor.execute(sub.id, 'temp-123', sub.responses, templateConfig);
-      outcomes.push({ ...sub, outcome });
-      await new Promise(r => setTimeout(r, 200)); // Visual delay
-      setResults([...outcomes]);
+    // Check if configuration is available
+    if (!templateConfig || !templateConfig.stages.length) {
+      alert("Error: Methodology Framework Configuration missing.");
+      setIsRunning(false);
+      return;
     }
-    setIsRunning(false);
+
+    try {
+      for (const sub of mockSubmissions) {
+        // Run core engine logic
+        const outcome = await processor.execute(sub.id, 'temp-123', sub.responses, templateConfig);
+        outcomes.push({ ...sub, outcome });
+        
+        // Progressive UI update
+        setResults([...outcomes]);
+        // Simulate real-world node latency
+        await new Promise(r => setTimeout(r, 400)); 
+      }
+    } catch (err) {
+      console.error("Simulation Node Error:", err);
+      alert("Simulation failed on the Dubai node. Check cluster health.");
+    } finally {
+      setIsRunning(false);
+    }
   };
 
   return (
     <div className="rounded-[40px] border border-white/10 bg-slate-950/60 p-10 backdrop-blur-3xl shadow-2xl relative overflow-hidden">
       <div className="absolute top-0 right-0 p-8 opacity-10"><ChartBarSquareIcon className="h-32 w-32 text-blue-500" /></div>
       
-      <div className="flex justify-between items-center mb-12">
+      <div className="flex justify-between items-center mb-12 relative z-20">
         <div>
           <h2 className="text-3xl font-black text-white tracking-tighter">Simulation Engine: <span className="text-blue-400">E2E Flow</span></h2>
           <p className="text-slate-400 text-sm mt-1">Processing 10 surveys through the 12-Point Funnel Scoring Engine.</p>
         </div>
         <button 
+          id="btn-run-simulation"
           onClick={runSimulation}
           disabled={isRunning}
-          className="px-8 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm transition-all shadow-xl shadow-blue-600/20 flex items-center gap-2 active:scale-95 disabled:opacity-50"
+          className="relative z-30 px-8 py-4 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-black text-sm uppercase tracking-widest transition-all shadow-2xl shadow-blue-600/30 flex items-center gap-2 active:scale-95 disabled:opacity-50 group overflow-hidden"
         >
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
           {isRunning ? <ArrowPathIcon className="h-5 w-5 animate-spin" /> : <ArrowPathIcon className="h-5 w-5" />}
-          Run End-to-End Test
+          {isRunning ? 'Orchestrating...' : 'Run End-to-End Test'}
         </button>
       </div>
 
