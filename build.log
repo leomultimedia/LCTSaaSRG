@@ -1,0 +1,34 @@
+
+> insightflow@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.2.2 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 7.3s
+  Running TypeScript ...
+  Finished TypeScript in 6.6s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/12) ...
+  Generating static pages using 7 workers (3/12) 
+  Generating static pages using 7 workers (6/12) 
+  Generating static pages using 7 workers (9/12) 
+Γ£ô Generating static pages using 7 workers (12/12) in 701ms
+  Finalizing page optimization ...
+
+Route (app)
+Γöî Γùï /
+Γö£ Γùï /_not-found
+Γö£ Γùï /assessment/demo
+Γö£ Γùï /auth/login
+Γö£ Γùï /auth/signup
+Γö£ Γùï /billing
+Γö£ Γùï /compliance
+Γö£ Γùï /dashboard/business
+Γö£ Γùï /landing
+Γöö Γùï /surveys/create
+
+
+Γùï  (Static)  prerendered as static content
+

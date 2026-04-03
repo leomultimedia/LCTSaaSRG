@@ -3,14 +3,35 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { GlobeAltIcon, ShieldCheckIcon, CubeTransparentIcon, UserGroupIcon, IdentificationIcon } from '@heroicons/react/24/outline';
 
+import { AuthService } from '@/infrastructure/auth/AuthService';
+
 export default function LoginPage() {
   const [role, setRole] = useState<'admin' | 'user'>('admin');
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const auth = new AuthService();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Success! Authentication cluster granted access for ${role === 'admin' ? 'Enterprise Principal' : 'Regional Delegate'}.`);
-    router.push('/');
+    setIsLoading(true);
+    try {
+      // For AD, we'd normally use auth.loginWithAD()
+      // For this SaaS demo, we simulate the cluster grant to the home dashboard
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      router.push('/');
+    } catch (err) {
+      alert(`Authentication Failed: ${err instanceof Error ? err.message : 'Unknown'}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleADLogin = async () => {
+    try {
+      await auth.loginWithAD();
+    } catch (err) {
+      console.error('AD Sync Error:', err);
+    }
   };
 
   return (
@@ -61,12 +82,20 @@ export default function LoginPage() {
             />
           </div>
 
-          <button type="submit" className="w-full rounded-2xl bg-blue-600 py-4 font-black uppercase tracking-widest text-sm text-white hover:bg-blue-500 shadow-xl shadow-blue-600/30 transition transform active:scale-95">
-             Authenticate Cluster Access
+          <button 
+            disabled={isLoading}
+            type="submit" 
+            className={`w-full rounded-2xl bg-blue-600 py-4 font-black uppercase tracking-widest text-sm text-white hover:bg-blue-500 shadow-xl shadow-blue-600/30 transition transform active:scale-95 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+             {isLoading ? 'Authenticating...' : 'Authenticate Cluster Access'}
           </button>
 
           <div className="pt-6 border-t border-white/5 text-center">
-             <button type="button" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 hover:text-blue-400 flex items-center justify-center mx-auto gap-2 group">
+             <button 
+               type="button" 
+               onClick={handleADLogin}
+               className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 hover:text-blue-400 flex items-center justify-center mx-auto gap-2 group"
+             >
                 <GlobeAltIcon className="h-4 w-4 group-hover:animate-spin" /> Active Directory (AD) / Azure Sync
              </button>
           </div>

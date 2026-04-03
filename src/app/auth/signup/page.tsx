@@ -3,16 +3,26 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ShieldCheckIcon, CubeTransparentIcon, RocketLaunchIcon } from '@heroicons/react/24/outline';
 
+import { AuthService } from '@/infrastructure/auth/AuthService';
+
 export default function SignupPage() {
   const [email, setEmail] = useState('');
   const [orgName, setOrgName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const auth = new AuthService();
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate signup success and redirect to business dashboard
-    alert(`Success! Organization '${orgName}' has been provisioned on the InsightFlow cluster.`);
-    router.push('/dashboard/business');
+    setIsLoading(true);
+    try {
+      await auth.signup(email, orgName);
+      router.push('/dashboard/business');
+    } catch (err: any) {
+      alert(`Provisioning Failed: ${err.message || 'Check your internet or Supabase URL'}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -57,8 +67,12 @@ export default function SignupPage() {
             </p>
           </div>
 
-          <button type="submit" className="w-full rounded-2xl bg-blue-600 py-4 font-black uppercase tracking-widest text-sm text-white hover:bg-blue-500 shadow-xl shadow-blue-600/30 transition transform active:scale-95">
-             Provision Tenant Cluster
+          <button 
+            disabled={isLoading}
+            type="submit" 
+            className={`w-full rounded-2xl bg-blue-600 py-4 font-black uppercase tracking-widest text-sm text-white hover:bg-blue-500 shadow-xl shadow-blue-600/30 transition transform active:scale-95 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+             {isLoading ? 'Provisioning...' : 'Provision Tenant Cluster'}
           </button>
         </form>
 

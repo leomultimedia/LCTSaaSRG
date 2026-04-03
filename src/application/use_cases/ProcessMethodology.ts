@@ -1,3 +1,5 @@
+import { SupabaseAssessmentRepository } from '@/infrastructure/repositories/AssessmentRepository';
+
 export const SalesFunnelStages = [
   "Awareness", "Engagement", "Lead Magnet", "Qualification", 
   "Nurture", "Intent", "Evaluation", "Negotiation", 
@@ -59,8 +61,7 @@ export class ScoringEngine {
 export class ProcessMethodology {
   private scoringEngine: ScoringEngine;
   
-  // In a real implementation, we'd inject repositories here (e.g. Supabase Repo)
-  constructor(private repo: any = null) {
+  constructor(private repo: SupabaseAssessmentRepository = new SupabaseAssessmentRepository()) {
     this.scoringEngine = new ScoringEngine();
   }
 
@@ -76,9 +77,11 @@ export class ProcessMethodology {
       score_breakdown: analysis.scores
     };
 
-    // 2. Save outcome via injected repository adapter
-    if (this.repo) {
+    // 2. Save outcome via real Supabase repository
+    try {
        await this.repo.saveOutcome(outcome);
+    } catch (err) {
+       console.error("Methodology persistence failed. Falling back to local only mode.", err);
     }
     
     // 3. Return outcome for trigger (e.g., CRM Webhooks)

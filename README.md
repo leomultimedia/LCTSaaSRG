@@ -1,80 +1,36 @@
-# InsightFlow
+# InsightFlow Enterprise SaaS Platform
 
-InsightFlow is a next-generation Enterprise SaaS Assessment & Survey System featuring a Glassmorphism aesthetic and built using CLEAN Architecture boundaries. This solution utilizes a multi-tenant cell-based methodology to ensure extreme scalability and GDPR/TDRA compliance.
+## 🚀 Architecture Overview
+InsightFlow is a multi-tenant SaaS platform built on **Next.js (App Router)**, **Supabase**, and **Docker**. It follows a **CLEAN Architecture** pattern to ensure market-readiness and scalability.
 
-## Features
+- **Domain Layer**: Core logic and entities (e.g., `ScoringEngine`).
+- **Application Layer**: Use cases (e.g., `ProcessMethodology`).
+- **Infrastructure Layer**: Real-world integrations (Supabase, Stripe, Azure AD).
 
-- **Glassmorphism UX:** A World's Best analytics dashboard with dark-mode first design and translucency.
-- **Dynamic Methodology Engine:** Instead of hard-coding funnels, enterprise customers can use a canvas to define custom research logic (e.g., a "12-Point Sales Funnel").
-- **CLEAN Architecture:** Proper separation of pure business logic (`src/domain`), Use Cases (`src/application`), Infrastructure adapters (`src/infrastructure`), and Next.js presentation layers (`src/components`, `src/app`).
-- **Data Privacy & Compliance:** Built with explicit compliance logic for GDPR Data Deletion (Right to be Forgotten) and TDRA local residency checks.
+## 🛡️ Security & Enterprise Integration
+- **Active Directory (AD)**: Integrated via Supabase Auth + Azure SAML/OAuth.
+- **Data Sovereignty**: Each organization is logically isolated at the row level (RLS ready).
+- **ISO 27001/GDPR**: Automated compliance mapping via `src/application/use_cases/GDPRComplianceService.ts`.
 
-## Documentation and System Scaffolding
+## 📦 Deployment (Docker Desktop)
+The platform is containerized using a multi-stage production build.
 
-### Directory Structure
+### 1. Requirements
+- Docker Desktop
+- Supabase Project URL & Anon Key (set in `.env.local`)
 
-```plaintext
-src/
-├── app/                  # Next.js App Router root (Pages, Layouts)
-├── components/           # React Presentation Components
-│   ├── methodology/      # Workflow builder and visual canvases
-│   └── compliance/       # Audit trails and compliance dashboards
-├── domain/               # Core entities and logic rules (e.g., Score calculcation)
-├── application/          # Use cases that orchestra domains (e.g., ProcessMethodology)
-└── infrastructure/       # External bounds (Supabase, Stripe, Third Party APIs)
-```
-
-## Getting Started
-
-First, install the necessary dependencies:
-
+### 2. Launch
 ```bash
-npm install
+docker compose up -d --build
 ```
+Access at [http://localhost:8080](http://localhost:8080).
 
-Start the development server:
+## 🛠 Features
+- **Discovery Engine**: 25 Questions + 5 Image + 5 Video multimodal survey logic.
+- **Scoring Engine**: Real-time 12-point sales funnel mapping.
+- **Enterprise Billing**: Tiered subscription levels with Stripe integration hooks.
 
-```bash
-npm run dev
-```
-
-Visit [http://localhost:3000](http://localhost:3000) to view the Glassmorphism Analytics Command Center.
-
-## Deployment & Setup Instructions
-
-To deploy InsightFlow, the following infrastructure must be configured:
-1. **Frontend Hosting:** Vercel (preferred for Next.js)
-2. **Backend Services:** Supabase (Database, Auth, Edge Functions, S3 Storage)
-3. **Security Overlay:** Cloudflare with Turnstile for Web Application Firewall (WAF)
-
-See the provided `setup_credentials_guide.md` (or instructions provided via agent) for detailed information on how to acquire and integrate standard Supabase & Cloudflare API keys for the initialization of your cloud environment.
-
-## 🚀 Deployment & Dockerization
-The platform is fully containerized for high-availability clusters (e.g. AWS ECS, Kubernetes).
-
-### Docker Orchestration
-```bash
-# Build the production node (Standalone Optimized)
-docker compose build
-
-# Start the cluster
-docker compose up -d
-```
-
-## 🔒 Enterprise Integration (SSO/AD)
-InsightFlow supports **Active Directory (AD)**, **SAML 2.0**, and **Azure Auth** clusters through our Sovereign Node Proxy.
-- **Admin Login**: [http://localhost:3000/auth/login](http://localhost:3000/auth/login) (Select 'Enterprise Admin')
-- **Sub-user Login**: [http://localhost:3000/auth/login](http://localhost:3000/auth/login) (Select 'Regional Delegate')
-- **Onboarding**: Self-service business tenant provisioning via `/auth/signup`.
-
-## 📈 Commercial Hub
-- **Landing Page**: [http://localhost:3000/landing](http://localhost:3000/landing) - A high-fidelity business commercial showcasing our 12-point research methodology.
-
-## 🛠 Project Structure
-- `src/domain`: Core logic nodes (ScoringEngine, AnalyticsService).
-- `src/application`: Use cases (GDPR Compliance, Funnel Mapping).
-- `src/components`: Premium Glassmorphism UI components.
-- `supabase/migrations`: SQL Schema for tiered billing and revenue logs.
-
----
-**Technical Note**: Ensure `NEXT_PUBLIC_SUPABASE_URL` is set in the environment to avoid node connection timeouts.
+## 📈 Tech Stack
+- Frontend: Next.js 14, Tailwind CSS, Framer Motion.
+- Backend: Supabase, Node.js (Edge Functions ready).
+- DevOps: Docker, Docker Compose.

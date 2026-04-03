@@ -1,0 +1,39 @@
+
+> insightflow@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.2.2 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 1 errors:
+./src/application/use_cases/ProcessMethodology.ts:1:1
+Module not found: Can't resolve '../repositories/AssessmentRepository'
+> 1 | import { SupabaseAssessmentRepository } from '../repositories/AssessmentRepository';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  2 |
+  3 | export const SalesFunnelStages = [
+  4 |   "Awareness", "Engagement", "Lead Magnet", "Qualification",
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/application/use_cases/ProcessMethodology.ts [Client Component Browser]
+    ./src/components/testing/SimulationDashboard.tsx [Client Component Browser]
+    ./src/components/testing/SimulationDashboard.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/application/use_cases/ProcessMethodology.ts [Client Component SSR]
+    ./src/components/testing/SimulationDashboard.tsx [Client Component SSR]
+    ./src/components/testing/SimulationDashboard.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (./src/application/use_cases/ProcessMethodology.ts:1:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
