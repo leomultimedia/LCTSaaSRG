@@ -33,10 +33,19 @@ export default function Home() {
     }, 100);
   };
 
-  const handleSave = (stages: any) => {
-    alert(`Success! Methodology '${activeMethodology?.name || 'New'}' logic has been re-synced to the Dubai node.`);
+  const handleSave = (stages: any, meta?: { client: string, version: string }) => {
+    alert(`Success! Methodology '${activeMethodology?.name || 'New'}' ${meta ? `(${meta.client} ${meta.version})` : ''} logic has been re-synced to the Dubai node.`);
     setIsEditing(false);
     setActiveMethodology(null);
+  };
+
+  const handleNewVersion = (m: any) => {
+    const nextVer = `v${(parseFloat(m.version.replace('v', '')) + 1).toFixed(1)}`;
+    setActiveMethodology({ ...m, id: 'new_v', version: nextVer });
+    setIsEditing(true);
+    setTimeout(() => {
+      document.getElementById('logic-canvas')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
   };
 
   return (
@@ -52,6 +61,7 @@ export default function Home() {
           <nav className="mt-8 flex gap-8 items-center border-t border-white/5 pt-4">
              <Link href="/" className="text-sm font-bold text-blue-400 border-b-2 border-blue-400 pb-1">Command Center</Link>
              <Link href="/surveys/create" className="text-sm font-medium text-slate-400 hover:text-white transition">Create Survey</Link>
+             <Link href="/compliance" className="text-sm font-medium text-slate-400 hover:text-white transition">Compliance & Audit</Link>
              <Link href="/billing" className="text-sm font-medium text-slate-400 hover:text-white transition">Account & Billing</Link>
              <Link href="/integrations" className="text-sm font-medium text-slate-400 hover:text-white transition">Integrations</Link>
           </nav>
@@ -138,7 +148,11 @@ export default function Home() {
       </div>
 
       <section>
-        <MethodologyBuilder onEdit={handleEdit} onAdd={() => handleEdit({ id: Date.now(), name: 'New Analytic Framework' })} />
+        <MethodologyBuilder 
+          onEdit={handleEdit} 
+          onAdd={() => handleEdit({ id: 'm-new', name: 'New Analytic Framework', client: 'New Client', version: 'v1.0' })} 
+          onNewVersion={handleNewVersion}
+        />
       </section>
 
       {isEditing && (

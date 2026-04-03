@@ -3,24 +3,27 @@ import React, { useState } from 'react';
 import { BeakerIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
 
 interface Methodology {
-  id: number;
+  id: string;
   name: string;
+  client: string;
+  version: string;
   type: string;
   status: string;
 }
 
 interface MethodologyBuilderProps {
-  onEdit: (m: Methodology) => void;
-  onAdd: () => void;
+  onEdit?: (m: Methodology) => void;
+  onAdd?: () => void;
+  onNewVersion?: (m: Methodology) => void;
 }
 
-const MethodologyBuilder = ({ onEdit, onAdd }: MethodologyBuilderProps) => {
+const MethodologyBuilder = ({ onEdit = () => {}, onAdd = () => {}, onNewVersion = () => {} }: MethodologyBuilderProps) => {
   const [activities, setActivities] = useState<Methodology[]>([
-    { id: 1, name: '12-Point Sales Funnel', type: 'Lead Gen', status: 'Active' },
-    { id: 2, name: 'Brand Sentiment Analysis', type: 'Research', status: 'Draft' }
+    { id: 'm1', name: '12-Point Sales Funnel', client: 'Global Enterprise', version: 'v2.4', type: 'Lead Gen', status: 'Active' },
+    { id: 'm2', name: 'Brand Sentiment Analysis', client: 'Local Retailer', version: 'v1.0', type: 'Research', status: 'Draft' }
   ]);
 
-  const handleStateToggle = (id: number) => {
+  const handleStateToggle = (id: string) => {
     setActivities(prev => prev.map(act => 
       act.id === id ? { ...act, status: act.status === 'Active' ? 'Draft' : 'Active' } : act
     ));
@@ -54,10 +57,17 @@ const MethodologyBuilder = ({ onEdit, onAdd }: MethodologyBuilderProps) => {
               </button>
             </div>
             <h3 className="text-white font-bold text-xl mb-1">{act.name}</h3>
+            <div className="flex items-center gap-3 mb-6">
+              <span className="text-blue-400 font-mono text-[10px] bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">{act.client}</span>
+              <span className="text-slate-500 font-mono text-[10px]">VER: {act.version}</span>
+            </div>
             <p className="text-slate-500 text-xs mb-6 font-mono uppercase tracking-tighter">Logic: Recursive Branching • Type: {act.type}</p>
             <div className="flex gap-4">
               <button onClick={() => onEdit(act)} className="text-[10px] font-black uppercase tracking-widest text-blue-400 hover:text-white flex items-center gap-2 group-hover:translate-x-1 transition-transform">
-                <AdjustmentsHorizontalIcon className="h-4 w-4" /> Edit Methodology
+                <AdjustmentsHorizontalIcon className="h-4 w-4" /> Edit Logic
+              </button>
+              <button onClick={() => onNewVersion(act)} className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-white transition">
+                + New Version
               </button>
             </div>
           </div>

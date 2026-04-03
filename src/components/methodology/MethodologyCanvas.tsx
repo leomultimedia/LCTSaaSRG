@@ -16,20 +16,25 @@ const initialStages: Stage[] = [
 ];
 
 interface MethodologyCanvasProps {
-  methodology: { id: number; name: string } | null;
-  onSave: (stages: Stage[]) => void;
+  methodology: { id: string; name: string; client?: string; version?: string } | null;
+  onSave: (stages: Stage[], meta: { client: string; version: string }) => void;
   onCancel: () => void;
 }
 
 export default function MethodologyCanvas({ methodology, onSave, onCancel }: MethodologyCanvasProps) {
   const [stages, setStages] = useState<Stage[]>(initialStages);
   const [methodologyName, setMethodologyName] = useState('');
+  const [clientName, setClientName] = useState('Standard Template');
+  const [versionNumber, setVersionNumber] = useState('v1.0');
 
   useEffect(() => {
     if (methodology) {
       setMethodologyName(methodology.name);
-      // Logic for new frameworks vs editing existing
-      if (!methodology.id || methodology.id > Date.now() - 10000) {
+      setClientName(methodology.client || 'Standard Template');
+      setVersionNumber(methodology.version || 'v1.0');
+      
+      // If it's a new derivative version or a completely new framework
+      if (!methodology.id || methodology.id === 'new_v') {
         setStages([{ id: '1', name: 'Initial Discovery', weight: 100, mapping: 'New Source' }]);
       }
     }
@@ -53,14 +58,31 @@ export default function MethodologyCanvas({ methodology, onSave, onCancel }: Met
   return (
     <div className="rounded-[40px] border border-white/10 bg-slate-950/60 p-10 backdrop-blur-3xl shadow-2xl transition hover:shadow-blue-500/10 border-t-blue-500/30">
       <div className="mb-10 flex flex-col lg:flex-row items-center justify-between gap-8 border-b border-white/5 pb-8 relative z-20">
-        <div>
-           <h2 className="text-3xl font-black text-white tracking-tighter flex items-center gap-3">
-             <div className="p-2 rounded-xl bg-blue-600/20 border border-blue-500/30"><MapPinIcon className="h-6 w-6 text-blue-400" /></div>
-             Logic Canvas: <span className="text-emerald-400">{methodologyName}</span>
+        <div className="flex-1">
+           <div className="flex items-center gap-3 mb-2 flex-wrap">
+             <div className="px-3 py-1 rounded-full bg-blue-600/20 border border-blue-500/30 text-[10px] font-black text-blue-400 uppercase tracking-widest flex items-center gap-1.5">
+               <CheckIcon className="h-3 w-3" /> Node Registered
+             </div>
+             <input 
+               type="text" 
+               value={clientName} 
+               onChange={(e) => setClientName(e.target.value)}
+               className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-black px-3 py-1 rounded-full focus:outline-none focus:border-emerald-500/50"
+               placeholder="CLIENT_NAME"
+             />
+             <input 
+               type="text" 
+               value={versionNumber} 
+               onChange={(e) => setVersionNumber(e.target.value)}
+               className="bg-white/5 border border-white/10 text-slate-400 text-[10px] font-mono px-3 py-1 rounded-full focus:outline-none focus:border-blue-500/50 w-16"
+               placeholder="v1.0"
+             />
+           </div>
+           <h2 className="text-3xl font-black text-white tracking-tighter flex items-center gap-3 truncate">
+             Logic Canvas: <span className="text-blue-400">{methodologyName}</span>
            </h2>
-           <p className="text-slate-500 text-sm mt-2 font-medium">Orchestrate your customer discovery lifecycle mapping.</p>
         </div>
-        <div className="flex flex-wrap gap-4 shrink-0">
+        <div className="flex flex-wrap gap-4 shrink-0 items-center">
           <button 
             id="btn-cancel-logic"
             onClick={onCancel} 
@@ -70,10 +92,10 @@ export default function MethodologyCanvas({ methodology, onSave, onCancel }: Met
           </button>
           <button 
             id="btn-save-logic"
-            onClick={() => onSave(stages)} 
-            className="px-8 py-3 rounded-2xl bg-blue-600 text-xs font-black uppercase tracking-widest text-white transition hover:bg-blue-500 shadow-2xl shadow-blue-600/30 active:scale-95 flex items-center gap-2"
+            onClick={() => onSave(stages, { client: clientName, version: versionNumber })} 
+            className="relative z-50 px-8 py-3 rounded-2xl bg-blue-600 text-xs font-black uppercase tracking-widest text-white transition hover:bg-blue-500 shadow-2xl shadow-blue-600/50 active:scale-95 flex items-center gap-2 border border-blue-400/30"
           >
-            <CheckIcon className="h-4 w-4" /> Save & Deploy
+            <CheckIcon className="h-4 w-4" /> Deploy Logic Framework
           </button>
           <button 
             id="btn-add-stage"

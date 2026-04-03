@@ -43,16 +43,20 @@ export default function SimulationDashboard() {
     }
 
     try {
+      console.log("Starting Sales Funnel Simulation: 10 Nodes...");
       for (const sub of mockSubmissions) {
         // Run core engine logic
         const outcome = await processor.execute(sub.id, 'temp-123', sub.responses, templateConfig);
         outcomes.push({ ...sub, outcome });
         
-        // Progressive UI update
-        setResults([...outcomes]);
+        // Progressive UI update - ensuring state sync
+        const currentBatch = [...outcomes];
+        setResults(currentBatch);
+        
         // Simulate real-world node latency
         await new Promise(r => setTimeout(r, 400)); 
       }
+      console.log("Simulation Complete. Synchronizing results to dashboard...");
     } catch (err) {
       console.error("Simulation Node Error:", err);
       alert("Simulation failed on the Dubai node. Check cluster health.");
