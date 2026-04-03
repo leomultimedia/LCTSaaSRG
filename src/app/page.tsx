@@ -4,7 +4,9 @@ import MethodologyCanvas from '@/components/methodology/MethodologyCanvas';
 import ComplianceMonitor from '@/components/compliance/ComplianceMonitor';
 import RealtimeTraffic from '@/components/dashboard/RealtimeTraffic';
 import { AnalyticsService } from '@/domain/services/AnalyticsService';
+import SimulationDashboard from '@/components/testing/SimulationDashboard';
 import { ChartBarIcon, UsersIcon, CurrencyDollarIcon, LightBulbIcon } from '@heroicons/react/24/outline';
+
 
 export default function Home() {
   // Mock data for initial world-class dashboard rendering
@@ -128,7 +130,12 @@ export default function Home() {
       <section>
         <ComplianceMonitor />
       </section>
+
+      <section className="pb-24">
+        <SimulationDashboard />
+      </section>
       
     </main>
+
   );
 }
