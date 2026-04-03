@@ -5,44 +5,29 @@ import AssessmentRenderer from '@/components/assessment/AssessmentRenderer';
 import { AssessmentSchema } from '@/domain/entities/Assessment';
 
 const sampleSchema: AssessmentSchema = {
-  id: 'a1b2c3d4',
-  title: 'InsightFlow Sales Qualification',
-  description: 'Please answer the following questions so we can map you correctly within the 12-Point Sales Funnel.',
+  id: 'master-framework-v1',
+  title: 'Global Master Framework | 12-Point Sales Funnel',
+  description: 'Adaptive methodology engine evaluating 25 distinct logical data points across multimodal survey layers.',
   questions: [
-    {
-      id: 'q1',
-      label: 'What is your primary goal?',
-      type: 'choice',
+    ...Array.from({ length: 15 }, (_, i) => ({
+      id: `q${i+1}`,
+      label: `Strategic Data Point 0${i+1}: ${['Market Intent', 'Competitor Awareness', 'Budgetary Authority', 'Timeline Urgency', 'Decision Maker Role'][i % 5]} Analysis`,
+      type: 'choice' as const,
       required: true,
-      options: ['Lead Generation', 'Brand Awareness', 'Process Automation']
-    },
-    {
-      id: 'q2',
-      label: 'Do you have an allocated budget?',
-      type: 'choice',
-      required: true,
-      options: ['Yes', 'No'],
-      logic: [
-        {
-          targetQuestionId: 'q4', // Skips directly to media upload if no budget
-          condition: 'equals',
-          value: 'No',
-          action: 'skip_to'
-        }
-      ]
-    },
-    {
-      id: 'q3',
-      label: 'What is your estimated timeline?',
-      type: 'text',
-      required: false,
-    },
-    {
-      id: 'q4',
-      label: 'Please upload a 30s video expressing your brand voice.',
-      type: 'video',
-      required: false,
-    }
+      options: ['High Correlation', 'Medium', 'Low / Neutral']
+    })),
+    ...Array.from({ length: 5 }, (_, i) => ({
+      id: `img-${i+1}`,
+      label: `Visual Brand Affinity 0${i+1}: Please upload your proposed ${['Logo Variant', 'Social Banner', 'Dashboard Mock', 'Color Palette', 'Brand Style Guide'][i]} for real-time sentiment analysis.`,
+      type: 'image' as const,
+      required: true
+    })),
+    ...Array.from({ length: 5 }, (_, i) => ({
+      id: `vid-${i+1}`,
+      label: `Exec Voice Assessment 0${i+1}: Please record a 15-second elevator pitch for your ${['Vision', 'USP', 'Retention Plan', 'Go-to-market', 'Product Roadmap'][i]}.`,
+      type: 'video' as const,
+      required: true
+    }))
   ]
 };
 

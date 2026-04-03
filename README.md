@@ -48,3 +48,33 @@ To deploy InsightFlow, the following infrastructure must be configured:
 3. **Security Overlay:** Cloudflare with Turnstile for Web Application Firewall (WAF)
 
 See the provided `setup_credentials_guide.md` (or instructions provided via agent) for detailed information on how to acquire and integrate standard Supabase & Cloudflare API keys for the initialization of your cloud environment.
+
+## 🚀 Deployment & Dockerization
+The platform is fully containerized for high-availability clusters (e.g. AWS ECS, Kubernetes).
+
+### Docker Orchestration
+```bash
+# Build the production node (Standalone Optimized)
+docker compose build
+
+# Start the cluster
+docker compose up -d
+```
+
+## 🔒 Enterprise Integration (SSO/AD)
+InsightFlow supports **Active Directory (AD)**, **SAML 2.0**, and **Azure Auth** clusters through our Sovereign Node Proxy.
+- **Admin Login**: [http://localhost:3000/auth/login](http://localhost:3000/auth/login) (Select 'Enterprise Admin')
+- **Sub-user Login**: [http://localhost:3000/auth/login](http://localhost:3000/auth/login) (Select 'Regional Delegate')
+- **Onboarding**: Self-service business tenant provisioning via `/auth/signup`.
+
+## 📈 Commercial Hub
+- **Landing Page**: [http://localhost:3000/landing](http://localhost:3000/landing) - A high-fidelity business commercial showcasing our 12-point research methodology.
+
+## 🛠 Project Structure
+- `src/domain`: Core logic nodes (ScoringEngine, AnalyticsService).
+- `src/application`: Use cases (GDPR Compliance, Funnel Mapping).
+- `src/components`: Premium Glassmorphism UI components.
+- `supabase/migrations`: SQL Schema for tiered billing and revenue logs.
+
+---
+**Technical Note**: Ensure `NEXT_PUBLIC_SUPABASE_URL` is set in the environment to avoid node connection timeouts.
