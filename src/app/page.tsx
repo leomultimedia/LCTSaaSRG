@@ -1,6 +1,7 @@
 import MethodologyBuilder from '@/components/methodology/MethodologyBuilder';
 import MethodologyCanvas from '@/components/methodology/MethodologyCanvas';
 import ComplianceMonitor from '@/components/compliance/ComplianceMonitor';
+import RealtimeTraffic from '@/components/dashboard/RealtimeTraffic';
 
 export default function Home() {
   return (
@@ -25,6 +26,11 @@ export default function Home() {
           </div>
         </div>
       </header>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+         <RealtimeTraffic />
+         <ComplianceMonitor />
+      </div>
 
       <section>
         <MethodologyBuilder />
