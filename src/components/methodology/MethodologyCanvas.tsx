@@ -30,7 +30,13 @@ export default function MethodologyCanvas() {
       </div>
 
       <DragDropContext onDragEnd={() => {}}>
-        <Droppable droppableId="stages">
+        <Droppable 
+          droppableId="stages"
+          type="DEFAULT"
+          isDropDisabled={false}
+          isCombineEnabled={false}
+          ignoreContainerClipping={false}
+        >
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-4">
               {stages.map((stage, index) => (
