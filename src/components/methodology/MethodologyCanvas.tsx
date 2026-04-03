@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { PlusIcon, TrashIcon, MapPinIcon } from '@heroicons/react/24/outline';
 
@@ -10,7 +10,15 @@ const initialStages = [
 ];
 
 export default function MethodologyCanvas() {
+  const [hasMounted, setHasMounted] = useState(false);
   const [stages, setStages] = useState(initialStages);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted) return null;
+
 
   return (
     <div className="rounded-2xl border border-white/20 bg-white/10 p-8 backdrop-blur-2xl">
