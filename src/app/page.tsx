@@ -5,7 +5,8 @@ import RealtimeTraffic from '@/components/dashboard/RealtimeTraffic';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black p-8 text-white space-y-12">
+    <main className="dark min-h-screen bg-slate-950 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black p-8 text-white space-y-12 antialiased">
+
       <header className="mb-12 border-b border-white/10 pb-6 flex justify-between items-center">
         <div>
           <h1 className="text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">

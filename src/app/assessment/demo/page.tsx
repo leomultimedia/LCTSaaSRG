@@ -48,7 +48,7 @@ const sampleSchema: AssessmentSchema = {
 
 export default function AssessmentDemoPage() {
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black p-8 pt-20">
+    <div className="dark min-h-screen bg-slate-950 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black p-8 pt-20 text-slate-50 antialiased">
       <AssessmentRenderer 
         schema={sampleSchema} 
         onSubmit={(responses) => {

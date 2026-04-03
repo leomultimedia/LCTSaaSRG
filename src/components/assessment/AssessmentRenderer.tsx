@@ -42,7 +42,8 @@ export default function AssessmentRenderer({ schema, onSubmit }: AssessmentRende
   if (!currentQuestion) return null;
 
   return (
-    <div className="max-w-2xl mx-auto rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-2xl shadow-2xl">
+    <div className="dark max-w-2xl mx-auto rounded-3xl border border-white/10 bg-slate-950/40 p-8 backdrop-blur-2xl shadow-2xl relative z-10">
+
       <div className="mb-8 border-b border-white/10 pb-6">
         <h2 className="text-3xl font-extrabold tracking-tight text-white">{schema.title}</h2>
         <p className="mt-2 text-slate-400">{schema.description}</p>
