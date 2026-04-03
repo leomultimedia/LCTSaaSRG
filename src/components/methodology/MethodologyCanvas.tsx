@@ -17,17 +17,31 @@ export default function MethodologyCanvas() {
     setHasMounted(true);
   }, []);
 
+  const handleAddStage = () => {
+    const newId = (stages.length + 1).toString();
+    setStages([...stages, { id: newId, name: 'New Funnel Phase', weight: 10, mapping: 'Logic Node' }]);
+    alert('New Research Phase Append successful.');
+  };
+
+  const handleDeleteStage = (id: string) => {
+    setStages(prev => prev.filter(s => s.id !== id));
+  };
+
   if (!hasMounted) return null;
 
 
   return (
-    <div className="rounded-2xl border border-white/20 bg-white/10 p-8 backdrop-blur-2xl">
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-white">Methodology Builder: <span className='text-blue-400'>12-Point Sales Funnel</span></h2>
-        <button className="flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500">
+    <div className="rounded-[40px] border border-white/10 bg-slate-950/40 p-10 backdrop-blur-3xl shadow-2xl transition hover:shadow-emerald-500/10">
+      <div className="mb-10 flex items-center justify-between">
+        <div>
+           <h2 className="text-3xl font-black text-white tracking-tighter">Strategic Canvas</h2>
+           <p className="text-slate-500 text-sm mt-1">Orchestrate your customer discovery lifecycle mapping.</p>
+        </div>
+        <button onClick={handleAddStage} className="flex items-center gap-2 rounded-2xl bg-emerald-600 px-6 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-emerald-500 shadow-xl shadow-emerald-600/20 active:scale-95">
           <PlusIcon className="h-4 w-4" /> Add Stage
         </button>
       </div>
+
 
       <DragDropContext onDragEnd={() => {}}>
         <Droppable 
@@ -48,19 +62,40 @@ export default function MethodologyCanvas() {
                       <div className="flex items-center gap-4">
                         <div className="text-lg font-mono text-slate-500">{index + 1}</div>
                         <div>
-                          <input type="text" defaultValue={stage.name} className="bg-transparent text-lg font-semibold text-white focus:outline-none" />
-                          <div className="flex items-center gap-2 text-sm text-slate-400">
+                          <input 
+                            type="text" 
+                            value={stage.name} 
+                            onChange={(e) => {
+                               const newStages = [...stages];
+                               newStages[index].name = e.target.value;
+                               setStages(newStages);
+                            }}
+                            className="bg-transparent text-lg font-bold text-white focus:outline-none" 
+                          />
+                          <div className="flex items-center gap-2 text-xs font-mono text-slate-500 uppercase">
                             <MapPinIcon className="h-4 w-4" /> Mapping: {stage.mapping}
                           </div>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-4">
-                        <input type="number" defaultValue={stage.weight} className="w-16 rounded-md border border-white/20 bg-black/40 p-2 text-center text-white" />
-                        <button className="opacity-0 group-hover:opacity-100 transition text-rose-400 hover:text-rose-300">
-                          <TrashIcon className="h-5 w-5" />
+                      <div className="flex items-center gap-6">
+                        <input 
+                          type="number" 
+                          value={stage.weight} 
+                          onChange={(e) => {
+                             const newStages = [...stages];
+                             newStages[index].weight = parseInt(e.target.value);
+                             setStages(newStages);
+                          }}
+                          className="w-20 rounded-2xl border border-white/10 bg-slate-900/50 p-3 text-center text-sm font-bold text-emerald-400 focus:border-emerald-500 outline-none" 
+                        />
+                        <button 
+                          onClick={() => handleDeleteStage(stage.id)}
+                          className="opacity-0 group-hover:opacity-100 transition duration-300 text-rose-500 hover:text-rose-400 p-2 hover:bg-rose-500/10 rounded-xl">
+                          <TrashIcon className="h-6 w-6" />
                         </button>
                       </div>
+
                     </div>
                   )}
                 </Draggable>
