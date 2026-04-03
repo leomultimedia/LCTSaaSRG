@@ -12,6 +12,10 @@ export class GDPRComplianceService {
     try {
       // 1. In a production system utilizing Edge Functions, this would trigger a secure RPC call.
       // We are simulating the boundary here on the frontend/Next.js adapter.
+      if (!supabase || typeof supabase.from !== 'function') {
+        console.error("GDPR Compliance Service: Supabase client is not configured.");
+        return false;
+      }
 
       // First, wipe logic outcomes & submissions
       // Fetch tenant assessment IDs since SupabaseJS `.in` expects an array of strings.

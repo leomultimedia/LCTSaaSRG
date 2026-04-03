@@ -11,13 +11,17 @@ export default function RealtimeTraffic() {
     // 1. Initial snapshot fetch would go here
     
     // 2. Set up Supabase Realtime Listener for new submissions
-    const channel = supabase
-      .channel('public:submissions')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'submissions' }, (payload) => {
-         setRecentSubmissions((prev) => [payload.new, ...prev].slice(0, 5));
-         setActiveSessions((prev) => prev + 1);
-      })
-      .subscribe();
+    let channel: any = null;
+    
+    if (supabase && typeof supabase.channel === 'function') {
+      channel = supabase
+        .channel('public:submissions')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'submissions' }, (payload) => {
+           setRecentSubmissions((prev) => [payload.new, ...prev].slice(0, 5));
+           setActiveSessions((prev) => prev + 1);
+        })
+        .subscribe();
+    }
 
     // Mock active sessions varying slightly for the "vibe"
     const interval = setInterval(() => {
@@ -25,7 +29,9 @@ export default function RealtimeTraffic() {
     }, 5000);
 
     return () => {
-      supabase.removeChannel(channel);
+      if (channel && supabase && typeof supabase.removeChannel === 'function') {
+        supabase.removeChannel(channel);
+      }
       clearInterval(interval);
     };
   }, []);
