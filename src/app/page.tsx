@@ -13,6 +13,9 @@ export default function Home() {
           <p className="text-slate-400 mt-2">Next-Gen Enterprise SaaS Assessment Command Center</p>
         </div>
         <div className="flex gap-4">
+          <a href="/assessment/demo" className="px-4 py-2 rounded-full bg-blue-500/20 border border-blue-500/30 text-sm font-semibold text-blue-400 hover:bg-blue-500/30 transition">
+            Preview Assessment Engine
+          </a>
           <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm font-mono text-emerald-400 flex items-center gap-2">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
